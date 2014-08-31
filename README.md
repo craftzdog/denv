@@ -50,7 +50,7 @@ See [this documentation](https://docs.docker.com/reference/api/docker_remote_api
 
 `container.on_destroy` - This configures event handler invoked when the container has been destroyed.
 
-## Gemerate XCConfig
+## Generate XCConfig
 
 If you specified xcconfig to output filetype with `-t` option, it generates `Denv.xcconfig` file which content is like following:
 
