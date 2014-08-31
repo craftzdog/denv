@@ -16,6 +16,9 @@ module Denv
       @conf.container.create_param = {
         'Image' => @argv[0]
       }
+      @conf.container.start_param = {
+        'PublishAllPorts' => true
+      }
 
       @conf.save_to_file
 
