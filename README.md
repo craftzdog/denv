@@ -50,9 +50,11 @@ See [this documentation](https://docs.docker.com/reference/api/docker_remote_api
 
 `container.on_destroy` - This configures event handler invoked when the container has been destroyed.
 
-## Generate XCConfig
 
-If you specified xcconfig to output filetype with `-t` option, it generates `Denv.xcconfig` file which content is like following:
+## Output format
+### XCConfig
+
+If you specified `xcconfig` to `-t` option, it generates `Denv.xcconfig` file which content is like following:
 
     DOCKER_HOST = docker-host.com
     CONTAINER_ID = bf5abaa741cc870ea3c82edf39dea59dd4ce2b3f316766863e5c332985ae6c70
@@ -63,7 +65,8 @@ If you specified xcconfig to output filetype with `-t` option, it generates `Den
     CONTAINER_PORT_9080 = 49194
     CONTAINER_PORT_9081 = 49195
 
-You can use these informations within your xcconfig file like so:
+It can be used in your XCode project.
+`Denv.xcconfig` is included to your xcconfig file like so:
 
 	#include "Denv.xcconfig"
 	
@@ -75,3 +78,7 @@ You can use these informations within your xcconfig file like so:
 The server hostname and port number are given through preprocessor macros, so you can use them in your code:
 
 	NSString url = [NSString stringWithFormat:@"http://%@:%d/", kAPIServerHost, kAPIServerPort];
+
+### JSON
+
+If you specified `json` to `-t` option, it outputs `Denv.json` file.
