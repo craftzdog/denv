@@ -25,13 +25,17 @@ module Denv
       puts "Denvfile created.".green
     end
 
-    # Create a container
-    def up
+    def load_config
       begin
         @conf.load_from_file
       rescue => e
         Denv.failure "Failed to load Denvfile.", e
       end
+    end
+
+    # Create a container
+    def up
+      load_config
 
       status = Status.new
       if status.container_running?
@@ -65,11 +69,7 @@ module Denv
     end
 
     def rm
-      begin
-        @conf.load_from_file
-      rescue => e
-        Denv.failure "Failed to load Denvfile.", e
-      end
+      load_config
 
       status = Status.new
       if status.container_running?
@@ -85,6 +85,7 @@ module Denv
     end
 
     def status
+      load_config
 
       status = Status.new
       if status.container_running?
