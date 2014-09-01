@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "denv"
   spec.version       = Denv::VERSION
   spec.authors       = ["Takuya Matsuyama"]
-  spec.email         = ["t@pkpk.info"]
+  spec.email         = ["nora@odoruinu.net"]
   spec.summary       = "Environment Builder Using Docker for Client-side Application"
   spec.description   = "Denv helps building Docker container for testing/development of client-side application."
   spec.homepage      = "http://odoruinu.net/"
