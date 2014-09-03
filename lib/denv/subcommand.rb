@@ -1,3 +1,4 @@
+require 'uri'
 
 module Denv
   class Subcommand
@@ -60,7 +61,7 @@ module Denv
       @container.start @conf.container.start_param
 
       puts ""
-      puts "Successfully launch container #{@container.id}".green
+      puts "Successfully launched container #{@container.id}".green
 
       output
 
@@ -115,14 +116,14 @@ module Denv
 
     def attach
       load_config
-      Denv.failure "IMAGE must be specified." if @argv.length < 1
-      image_id = @argv[0]
+      Denv.failure "CONTAINER must be specified." if @argv.length < 1
+      container_id = @argv[0]
       
-      puts "Attaching to a docker container..#{image_id}"
-      @container = Docker::Container.get image_id
+      puts "Attaching to a docker container..#{container_id}"
+      @container = Docker::Container.get container_id
 
       puts ""
-      puts "Successfully attach container #{@container.id}".green
+      puts "Successfully attached container #{@container.id}".green
 
       output
 
@@ -130,6 +131,31 @@ module Denv
       status.save_to_file
     end
 
+    def login
+      load_config
+
+      status = Status.new
+      if status.container_running?
+
+        @container = status.container
+        network_settings = @container.json["NetworkSettings"]
+
+        unless network_settings.nil? ||
+          network_settings["Ports"].nil? ||
+          network_settings["Ports"]["22/tcp"].nil?
+
+          port = network_settings["Ports"]["22/tcp"][0]["HostPort"]
+          host = URI.parse(Docker.url).host
+
+          exec "ssh #{host} -p #{port}"
+        else
+          Denv.failure "The container does not expose port 22"
+        end
+
+      else
+        Denv.failure "Container is not running."
+      end
+    end
 
     def output
 

@@ -46,7 +46,10 @@ HELP
           opts.banner = "Usage: denv status"
         end,
         'attach' => OptionParser.new do |opts|
-          opts.banner = "Usage: denv attach IMAGE"
+          opts.banner = "Usage: denv attach CONTAINER"
+        end,
+        'login' => OptionParser.new do |opts|
+          opts.banner = "Usage: denv login"
         end
       }
       subcommands['st'] = subcommands['status']
