@@ -11,6 +11,8 @@ Commonly used sub-commands are:
    up     :  Create a container
    rm     :  Destroy running container
    status :  Display running container status
+   attach :  Attach to specified container
+   login  :  Connect to running container via SSH
  
 See 'denv SUBCOMMAND --help' for more information on a specific sub-command.
 HELP
@@ -18,6 +20,7 @@ HELP
       # Default options
       @options = OpenStruct.new
       @options.filetype = "xcconfig"
+      @options.force = false
 
       global = OptionParser.new do |opts|
         opts.banner = "Usage: denv [options] [subcommand [options]]"
@@ -34,12 +37,16 @@ HELP
           opts.banner = "Usage: denv up [options]"
           opts.on('-o FileName', '--output=FileName', "Destination to output denv info"){|v| @options.output = v }
           opts.on('-t FileType', '--type=FileType', "Output file type: xcconfig(Default), json"){|v| @options.filetype = v }
+          opts.on('-f', '--force', "Force to create a container. Existing container will be removed."){|v| @options.force = v }
         end,
         'rm' => OptionParser.new do |opts| 
           opts.banner = "Usage: denv rm [options]"
         end,
         'status' => OptionParser.new do |opts| 
           opts.banner = "Usage: denv status"
+        end,
+        'attach' => OptionParser.new do |opts|
+          opts.banner = "Usage: denv attach IMAGE"
         end
       }
       subcommands['st'] = subcommands['status']

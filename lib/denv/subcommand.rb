@@ -39,9 +39,13 @@ module Denv
 
       status = Status.new
       if status.container_running?
-        puts "The container is running.".yellow
-        puts "Container ID: #{status.container.id}".green
-        exit 0
+        unless @options.force
+          puts "The container is running.".yellow
+          puts "Container ID: #{status.container.id}".green
+          exit 0
+        else
+          rm
+        end
       end
 
       # Validate config
@@ -77,6 +81,8 @@ module Denv
         puts "Deleting container..#{@container.id}"
         @container.delete(:force => true)
         puts "OK".green
+      else
+        puts "Container is not running.".yellow
       end
       status.delete
 
@@ -106,6 +112,24 @@ module Denv
     def st
       status
     end
+
+    def attach
+      load_config
+      Denv.failure "IMAGE must be specified." if @argv.length < 1
+      image_id = @argv[0]
+      
+      puts "Attaching to a docker container..#{image_id}"
+      @container = Docker::Container.get image_id
+
+      puts ""
+      puts "Successfully attach container #{@container.id}".green
+
+      output
+
+      status = Status.new @container
+      status.save_to_file
+    end
+
 
     def output
 
