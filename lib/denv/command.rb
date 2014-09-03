@@ -46,7 +46,10 @@ HELP
           opts.banner = "Usage: denv status"
         end,
         'attach' => OptionParser.new do |opts|
-          opts.banner = "Usage: denv attach CONTAINER"
+          opts.banner = "Usage: denv attach [options] CONTAINER"
+          opts.on('-o FileName', '--output=FileName', "Destination to output denv info"){|v| @options.output = v }
+          opts.on('-t FileType', '--type=FileType', "Output file type: xcconfig(Default), json"){|v| @options.filetype = v }
+          opts.on('-f', '--force', "Force to create a container. Existing container will be removed."){|v| @options.force = v }
         end,
         'login' => OptionParser.new do |opts|
           opts.banner = "Usage: denv login"

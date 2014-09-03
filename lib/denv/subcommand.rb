@@ -34,10 +34,10 @@ module Denv
       end
     end
 
-    # Create a container
-    def up
-      load_config
-
+    # Check if the container running.
+    # Exit if running
+    # Remove it if 'force' option enabled
+    def check_running
       status = Status.new
       if status.container_running?
         unless @options.force
@@ -48,6 +48,13 @@ module Denv
           rm
         end
       end
+    end
+
+    # Create a container
+    def up
+      load_config
+
+      check_running
 
       # Validate config
       Denv.failure "image is not specified in your Denvfile." if @conf.container.create_param['Image'].nil?
@@ -118,7 +125,9 @@ module Denv
       load_config
       Denv.failure "CONTAINER must be specified." if @argv.length < 1
       container_id = @argv[0]
-      
+
+      check_running
+
       puts "Attaching to a docker container..#{container_id}"
       @container = Docker::Container.get container_id
 
